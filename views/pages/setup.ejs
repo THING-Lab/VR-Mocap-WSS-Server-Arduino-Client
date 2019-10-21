@@ -1,0 +1,39 @@
+<% include ../partials/header %>
+<% include ../partials/menu %>
+	<div class="container">
+		<br>
+		
+		<table class="table table-bordered" id="stats_table">
+			<tr>
+				<th class="align-left">No.</th>
+				<th class="align-left">WeMos Host</th>
+				<th class="align-left">WeMos UUID</th>
+                <th class="align-left">QTM Mapping</th>
+                <th class="align-left">Update Mapping</th>
+			</tr>
+			<% if (wemos_uuid) { 
+                var device_rows = '';
+                var i = 1;
+                for(var wemos_host in wemos_uuid) {
+                    device_rows += '<tr><td>' + i + '</td>';
+                    device_rows += '<td>' + wemos_host + '</td>';
+                    device_rows += '<td>' + wemos_uuid[wemos_host] + '</td>';
+                        if(wemos_uuid_qtm){
+                            if(wemos_uuid[wemos_host] in wemos_uuid_qtm){
+                                device_rows += '<td><input type="text" class="form-control"  value="' +wemos_uuid_qtm[wemos_uuid[wemos_host]]+ '" id="' + wemos_uuid[wemos_host] + '"></td>'
+                            }else{
+                                device_rows += '<td><input type="text" class="form-control" placeholder="Not set" id="' + wemos_uuid[wemos_host] + '"></td>'
+                            }
+                        }else{
+                            device_rows += '<td><input type="text" class="form-control" placeholder="Not set" id="' + wemos_uuid[wemos_host] + '"></td>'
+                        } 
+                    var aa = "'" + wemos_uuid[wemos_host] + "'";
+                    device_rows += '<td><a href="#" onclick="update_qtm_mapping('+ aa+')">' + "Update" + '</a></td></tr>';
+                }
+                %>
+			<%- device_rows %>
+			<% } %>
+		</table>
+		<br>
+	</div>
+<% include ../partials/footer %>
