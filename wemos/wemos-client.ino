@@ -22,7 +22,7 @@ String WEMOS_ID = "#" + mac + "#" + host;
 String SERVERIPADDR = "192.168.1.4";
 uint16_t WS_SERVERPORT = 80;
 String ssid = "Get_Your_Own";
-String pass = "newton264$$";
+String pass = "*****";
 
 String heartBeatEP = SERVERIPADDR+"heartbeat";
 String delim = "@";
