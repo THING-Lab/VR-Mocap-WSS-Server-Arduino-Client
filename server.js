@@ -3,7 +3,7 @@ import WebSocket from 'ws';
 
 import serverConfig from './config/ServerConfig';
 
-import handle from './src/Utils/FileWriter'
+import {writeToDisk,readFromDisk} from './src/Utils/FileWriter'
 
 
 // const qtmParser = require('./src/qualisys/QualisysParser.js');
@@ -71,7 +71,7 @@ app.post('/updateDevice', (req, res) => {
       }else{
         wemos_uuid_qtm[req_uuid]= req_qtm_id;
         qtm_wemos_uuid[req_qtm_id] = req_uuid
-        handle.writeToDisk('wemos_uuid.json', wemos_uuid,'wemos_uuid_qtm.json', wemos_uuid_qtm);
+        writeToDisk('wemos_uuid.json', wemos_uuid,'wemos_uuid_qtm.json', wemos_uuid_qtm);
         res.send("Updated!!!");
       }
     }else{
@@ -98,7 +98,6 @@ wss.on('connection', function(clientSocket) {
 
   clientSocket.on('message', function incoming(message) {
     console.log('received: %s', message);
-    console.log("calling parse");
     parseMessage(message, clientSocket);
   });
 
