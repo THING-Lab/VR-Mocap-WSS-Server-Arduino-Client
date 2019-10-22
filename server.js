@@ -1,6 +1,10 @@
 import express from 'express';
 import WebSocket from 'ws';
-const http = require('http');
+
+import serverConfig from './config/ServerConfig';
+
+import handle from './src/Utils/FileWriter'
+
 
 // const qtmParser = require('./src/qualisys/QualisysParser.js');
 // qtmParser();
@@ -13,13 +17,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/'));
 
-const server_port = 5000;
-const wsserver_port = 80;
-
 var delim = "@";
 var wemos_uuid = new Object();
-
 var wemos_uuid_qtm = new Object();
+var qtm_wemos_uuid = new Object();
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -69,6 +70,8 @@ app.post('/updateDevice', (req, res) => {
         }
       }else{
         wemos_uuid_qtm[req_uuid]= req_qtm_id;
+        qtm_wemos_uuid[req_qtm_id] = req_uuid
+        handle.writeToDisk('wemos_uuid.json', wemos_uuid,'wemos_uuid_qtm.json', wemos_uuid_qtm);
         res.send("Updated!!!");
       }
     }else{
@@ -84,11 +87,11 @@ app.get('/heartbeat', (req, res) => {
     res.status(200);
     res.send();
 });
-app.listen(server_port, '0.0.0.0', function() {
-    console.info('Server running on port: ' + server_port);
+app.listen(serverConfig.server_http_port, '0.0.0.0', function() {
+    console.info('Server running on port: ' + serverConfig.server_http_port);
 });
 
-const wss = new WebSocket.Server({ port: wsserver_port });
+const wss = new WebSocket.Server({ port: serverConfig.wemos_stream_port });
 wss.on('connection', function(clientSocket) {
   //clientSocket.send('Connected to server');
   console.log('connected to client: ' + JSON.stringify(clientSocket._socket.address()));
@@ -111,8 +114,6 @@ wss.on('error', function(clientSocket) {
   //clientSocket.send('Connected to server');
   console.log('Error occurrect to client: ' + JSON.stringify(clientSocket));
 });
-
-
 
 function parseMessage(message, clientSocket) {
   if (message != null && message.length>0){

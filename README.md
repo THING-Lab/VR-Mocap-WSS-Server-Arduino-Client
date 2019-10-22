@@ -11,6 +11,7 @@ Open the server.conf file.
 Set the mocap_server address.
 
 Start the server:
+npm install
 npm start
 
 [Wemos - setup]
