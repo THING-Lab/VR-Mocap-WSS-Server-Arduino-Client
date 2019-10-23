@@ -6,8 +6,13 @@ import serverConfig from './config/ServerConfig';
 import {writeToDisk,readFromDisk} from './src/Utils/FileWriter'
 
 
-// const qtmParser = require('./src/qualisys/QualisysParser.js');
-// qtmParser();
+const qtmParser = require('./src/qualisys/QualisysParser.js');
+try {
+  qtmParser();  
+} catch (error) {
+  console.log("Failed to create QualisysParser: " + error);
+}
+
 
 const app = express();
 var bodyParser = require('body-parser'); 

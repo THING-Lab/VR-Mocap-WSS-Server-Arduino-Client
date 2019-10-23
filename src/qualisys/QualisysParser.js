@@ -1,27 +1,27 @@
-const colors = require('colors')
+// const colors = require('colors')
 const QTMrt = require('qualisys-rt');
 const qtmReader = new QTMrt.Api();
 
-function init(io) {
-  io.on('connection', (socket) => {
-    console.log(socket);
-  });
+function init() {
+  // io.on('connection', (socket) => {
+  //   console.log(socket);
+  // });
   qtmReader.on('frame', function(data) {
     // console.log('Received frame:'.green);
     console.log(data)
-    io.sockets.emit('frame',
-      data.components['6dEuler'].rigidBodies.map(
-        body => {
-          return {
-            x: body.x,
-            y: body.y,
-            z: body.z,
-            xRot: body.euler1,
-            yRot: body.euler2,
-            zRot: body.euler3,
-          }
-        })
-    );
+    // io.sockets.emit('frame',
+    //   data.components['6dEuler'].rigidBodies.map(
+    //     body => {
+    //       return {
+    //         x: body.x,
+    //         y: body.y,
+    //         z: body.z,
+    //         xRot: body.euler1,
+    //         yRot: body.euler2,
+    //         zRot: body.euler3,
+    //       }
+    //     })
+    // );
   });
   
   qtmReader.on('end', function(data) {
