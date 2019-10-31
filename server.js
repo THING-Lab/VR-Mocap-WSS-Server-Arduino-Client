@@ -7,12 +7,19 @@ import {writeToDisk,readFromDisk} from './src/Utils/FileWriter'
 
 
 const qtmParser = require('./src/qualisys/QualisysParser.js');
+
+import {startStream, stopStream} from './src/osc-client/osc-qtm'
+import {startOscListener, stopOscListener} from './src/osc-client/Osc-Rt-Udp-Listener'
+
 try {
-  qtmParser();  
+  //qtmParser();  
+  startOscListener();
+  startStream();
 } catch (error) {
+  stopStream();
+  stopOscListener();
   console.log("Failed to create QualisysParser: " + error);
 }
-
 
 const app = express();
 var bodyParser = require('body-parser'); 
