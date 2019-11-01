@@ -5,20 +5,21 @@ import serverConfig from './config/ServerConfig';
 
 import {writeToDisk,readFromDisk} from './src/Utils/FileWriter'
 
-
-const qtmParser = require('./src/qualisys/QualisysParser.js');
-
-import {startStream, stopStream} from './src/osc-client/osc-qtm'
-import {startOscListener, stopOscListener} from './src/osc-client/Osc-Rt-Udp-Listener'
+import {startStream, stopStream, startOscListener, stopOscListener} from './src/osc-client/osc-qtm'
 
 try {
-  //qtmParser();  
   startOscListener();
-  startStream();
+} catch (error) {
+  console.log('Failed to OSC - Listener: ' + error);
+  console.log('Gracefully shutdown listener'); 
+  stopOscListener();
+}
+
+try {
+  startStream('StreamFrames AllFrames 6DEuler');
 } catch (error) {
   stopStream();
-  stopOscListener();
-  console.log("Failed to create QualisysParser: " + error);
+  console.log("Failed to create startStream: " + error);
 }
 
 const app = express();
