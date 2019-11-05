@@ -19,10 +19,10 @@ uint8_t disconnectTimeoutCount = 3;
 String mac = WiFi.macAddress();
 String host = WiFi.hostname();
 String WEMOS_ID = "#" + mac + "#" + host;
-String SERVERIPADDR = "192.168.1.4";
+String SERVERIPADDR = "192.168.1.3";
 uint16_t WS_SERVERPORT = 80;
-String ssid = "Get_Your_Own";
-String pass = "*****";
+String ssid = "The Grid";
+String pass = "***";
 
 String heartBeatEP = SERVERIPADDR+"heartbeat";
 String delim = "@";
@@ -114,13 +114,13 @@ void handle_click(){
 //    webSocket.sendBIN(const uint8_t * payload, size_t length);.  
    webSocket.sendTXT(CLICK_EVENT_REQ);
   }
-  else{
-    if((millis() - t0 ) > timeout){
-      t0 = millis();
-      Serial.printf("[handle_click] Pin not set Sending clickevent...\n");
-      webSocket.sendTXT(CLICK_EVENT_REQ);
-    }
-  }
+//  else{
+//    if((millis() - t0 ) > timeout){
+//      t0 = millis();
+//      Serial.printf("[handle_click] Pin not set Sending clickevent...\n");
+//      webSocket.sendTXT(CLICK_EVENT_REQ);
+//    }
+//  }
 }
 
 

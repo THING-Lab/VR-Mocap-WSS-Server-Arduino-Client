@@ -7,8 +7,10 @@ function init() {
   //   console.log(socket);
   // });
   qtmReader.on('frame', function(data) {
-    // console.log('Received frame:'.green);
+    console.log('Received frame:'.green);
     console.log(data)
+    console.log
+
     // io.sockets.emit('frame',
     //   data.components['6dEuler'].rigidBodies.map(
     //     body => {
