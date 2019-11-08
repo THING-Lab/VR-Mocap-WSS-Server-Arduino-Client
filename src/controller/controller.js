@@ -36,7 +36,7 @@ router.get("/stopStreaming", (req, res) => {
   try {
     shutdownStreams();
   } catch (error) {
-    console.log("Failed to create startStream: " + error);
+    console.log("Failed to stopStream: " + error);
     res.status(500).send("Failed");
   }
   res.status(200).send("Hello World!");
