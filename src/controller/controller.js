@@ -12,9 +12,9 @@ var wemos_uuid_qtm = new Object();
 var qtm_wemos_uuid = new Object();
 var wemos_uuid = null;
 
-const init = (data) => {
-    wemos_uuid = data;
-}
+const init = data => {
+  wemos_uuid = data;
+};
 
 router.get("/", (req, res) => {
   res.send("Hello World!");

@@ -127,17 +127,21 @@ const stop = (qtmServerAddr = QTMServerAddress) => {
   return udpPortClinet;
 };
 
-const startOscListener = (callbackOnMessage=null, callbackOnError=null, LISTENER_PORT = QTM_RT_OSC_LISTENER_PORT) => {
+const startOscListener = (
+  callbackOnMessage = null,
+  callbackOnError = null,
+  LISTENER_PORT = QTM_RT_OSC_LISTENER_PORT
+) => {
   QTM_RT_OSC_LISTENER_PORT = LISTENER_PORT;
-  if(callbackOnMessage == null || typeof(callbackOnMessage) == undefined){
-    callbackOnMessage = (oscMessage) => {
+  if (callbackOnMessage == null || typeof callbackOnMessage == undefined) {
+    callbackOnMessage = oscMessage => {
       console.log("[OSC Server]" + JSON.stringify(oscMessage));
-    }
+    };
   }
-  if(callbackOnError == null || typeof(callbackOnError) == undefined){
-    callbackOnError = (err) => {
+  if (callbackOnError == null || typeof callbackOnError == undefined) {
+    callbackOnError = err => {
       console.log("[OSC Server] Error : " + err);
-    }
+    };
   }
 
   udpPortServer = createSocket("127.0.0.1", QTM_RT_OSC_LISTENER_PORT);
