@@ -1,44 +1,53 @@
 var osc = require("osc");
 
-const QTMServerAddress = '127.0.0.1';
+var QTMServerAddress = '127.0.0.1';
 const QTM_RT_OSC_PORT = 22225; //base +4 port :xD
 var udpPortClinet = null;
+var udpPortClinet_shut = null;
 var udpPortServer = null;
 //default listener port
 var QTM_RT_OSC_LISTENER_PORT = 31004;
 
 //returns the client. Use it to subscribe to other components.
+const createSocket = (addr, port) =>{
+  return new osc.UDPPort({
+    localAddress: addr,
+    localPort: port,
+    metadata: true
+  });
+}
+
 const startStream = (components, qtmServerAddr = QTMServerAddress) => {
   QTMServerAddress = qtmServerAddr;
-  udpPortClinet = new osc.UDPPort({
-        localAddress: QTMServerAddress,
-        localPort: 54663,
-        metadata: true
-      });
-
-      udpPortClinet.on("message", function (oscMsg, timeTag, info) {
-        console.log("[OSC Client] An OSC message just arrived!", oscMsg);
-        console.log("[OSC Client] Remote info is: ", info);
-      });
-
-      // Open the socket.
-      udpPortClinet.open();
-      console.log("[OSC Client] - Openning port :"+ QTM_RT_OSC_PORT);
-      udpPortClinet.on("ready", function () {
-        console.log("[OSC Client] ready - sending message to QTM to connect on port: " + QTM_RT_OSC_LISTENER_PORT);
-        udpPortClinet.send({
-            address: "/qtm",
-            args: [
-                {
-                    type: "s",
-                    value: "Connect"
-                },
-                {
-                    type: "i",
-                    value: QTM_RT_OSC_LISTENER_PORT
-                }
-            ]
-        }, QTMServerAddress, QTM_RT_OSC_PORT);
+  if(udpPortClinet!=null){
+    console.log("[OSC Client] Closing existing socket....");
+    udpPortClinet.close();
+    udpPortClinet = null;
+  }
+  udpPortClinet = createSocket(QTMServerAddress, 54663)
+  udpPortClinet.on("message", function (oscMsg, timeTag, info) {
+      console.log("[OSC Client] An OSC message just arrived!", oscMsg);
+      console.log("[OSC Client] Remote info is: ", info);
+    });
+    // Open the socket.
+    udpPortClinet.open();
+    console.log(udpPortClinet);
+    console.log("[OSC Client] - Openning port :"+ QTM_RT_OSC_PORT);
+    udpPortClinet.on("ready", function () {
+      console.log("[OSC Client] ready - sending message to QTM to connect on port: " + QTM_RT_OSC_LISTENER_PORT);
+      udpPortClinet.send({
+          address: "/qtm",
+          args: [
+              {
+                  type: "s",
+                  value: "Connect"
+              },
+              {
+                  type: "i",
+                  value: QTM_RT_OSC_LISTENER_PORT
+              }
+          ]
+      }, QTMServerAddress, QTM_RT_OSC_PORT);
       udpPortClinet.send({
         address: "/qtm",
         args: [
@@ -52,60 +61,59 @@ const startStream = (components, qtmServerAddr = QTMServerAddress) => {
   return udpPortClinet;  
 };
 
-const stopStream = () => {
-  if(udpPortClinet != null){
-    shutdownStreams();
+const stop = (qtmServerAddr = QTMServerAddress) => {
+  QTMServerAddress = qtmServerAddr;
+  if(udpPortClinet_shut!=null){
+    console.log("[OSC Client] Closing existing socket....");
+    udpPortClinet_shut.close();
+    udpPortClinet_shut = null;
   }
+  udpPortClinet_shut = createSocket(QTMServerAddress, 54699)
+  udpPortClinet_shut.on("message", function (oscMsg, timeTag, info) {
+      console.log("[OSC Client] An OSC message just arrived! - shut-down channel", oscMsg);
+      console.log("[OSC Client] Remote info is: ", info);
+    });
+
+    // Open the socket.
+    udpPortClinet_shut.open();
+    console.log(udpPortClinet_shut)
+    udpPortClinet_shut.on("ready", function () {
+      console.log("[OSC Client] Sending stutdown command. ");
+      udpPortClinet_shut.send({
+          address: "/qtm",
+          args: [
+              {
+                  type: "s",
+                  value: "Connect"
+              },
+              {
+                  type: "i",
+                  value: QTM_RT_OSC_LISTENER_PORT
+              }
+          ]
+      }, QTMServerAddress, QTM_RT_OSC_PORT);
+      udpPortClinet_shut.send({
+        address: "/qtm",
+        args: [
+            {
+                type: "s",
+                value: "disconnect Stop"
+            }
+        ]
+    }, QTMServerAddress, QTM_RT_OSC_PORT);
+  });
+  return udpPortClinet;  
 };
-
-const shutdownStreams = () => {
-    try{
-        if(udpPortClinet != null){
-          console.log("[OSC Client] Sending stutdown command.")
-          udpPortClinet.send({
-            address: "/qtm",
-            args: [
-                {
-                    type: "s",
-                    value: "disconnect Stop"
-                }
-            ]
-          }, QTMServer, QTM_RT_OSC_PORT);
-          udpPortClinet.close();
-      } 
-    }catch(err){
-        console.log(err);
-    }
-}
-
-//Gracefully shut down the streams? why not? duhh
-process.on('SIGINT', (signal) => {
-    console.log("[osc-qtm] " + signal + ' signal received.');
-    shutdownStreams();
-    stopOscListener();
-    process.exitCode = 0;
-});
-
-process.on('exit', (signal) => {
-    console.log("[osc-qtm] " + signal + ' signal received.');
-    shutdownStreams();
-    stopOscListener();
-    process.exitCode = 0;
-});
 
 const startOscListener = (LISTENER_PORT=QTM_RT_OSC_LISTENER_PORT) =>{
   QTM_RT_OSC_LISTENER_PORT = LISTENER_PORT;
-  udpPortServer = new osc.UDPPort({
-    localAddress:'127.0.0.1',
-    localPort: LISTENER_PORT
-  });
+  udpPortServer = createSocket('127.0.0.1', QTM_RT_OSC_LISTENER_PORT);
   udpPortServer.on("ready", function () {  
     console.log("Listening for OSC over UDP.");
   });
   
   udpPortServer.on("message", function (oscMessage) {
-    console.log("[OSC Server]" + JSON.parse(oscMessage));
-    console.log(oscMessage);
+    console.log("[OSC Server]" + JSON.stringify(oscMessage));
   });
   
   udpPortServer.on("error", function (err) {
@@ -121,7 +129,22 @@ const stopOscListener = () =>{
   }
 }
 
+//Gracefully shut down the streams? why not? duhh
+process.on('SIGINT', (signal) => {
+  console.log("[osc-qtm] " + signal + ' signal received.');
+  stop();
+  stopOscListener();
+  process.exitCode = 0;
+});
+
+process.on('exit', (signal) => {
+  console.log("[osc-qtm] " + signal + ' signal received.');
+  stop();
+  stopOscListener();
+  process.exitCode = 0;
+});
+
 module.exports.startStream = startStream;
-module.exports.stopStream = stopStream;
+module.exports.shutdownStreams = stop;
 module.exports.startOscListener = startOscListener
 module.exports.stopOscListener = stopOscListener

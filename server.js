@@ -5,24 +5,14 @@ import serverConfig from './config/ServerConfig';
 
 import {writeToDisk,readFromDisk} from './src/Utils/FileWriter'
 
-import {startStream, stopStream, startOscListener, stopOscListener} from './src/osc-client/osc-qtm'
+import {startStream, shutdownStreams, startOscListener, stopOscListener} from './src/osc-client/osc-qtm'
 
 try {
-  server = startOscListener();
-  server.on("message", function (oscMessage) {
-    //the oscMessage here is a JSON obj, you can parse it however you want
-  });
+  var server = startOscListener();
 } catch (error) {
-  console.log('Failed to OSC - Listener: ' + error);
+  console.log('Failed to start OSC - Listener: ' + error);
   console.log('Gracefully shutdown listener'); 
   stopOscListener();
-}
-
-try {
-  startStream('StreamFrames AllFrames 6DEuler');
-} catch (error) {
-  stopStream();
-  console.log("Failed to create startStream: " + error);
 }
 
 const app = express();
@@ -50,6 +40,27 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => {
   res.send('Hello World!')
   console.log("[GET] /")
+});
+
+app.get('/startStreaming', (req, res) => {
+  try {
+    startStream('StreamFrames AllFrames 6DEuler');
+  } catch (error) {
+    shutdownStreams();
+    console.log("Failed to create startStream: " + error);
+    res.status(500).send('Failed')
+  }
+  res.status(200).send('Started')
+});
+
+app.get('/stopStreaming', (req, res) => {
+  try{
+    shutdownStreams();
+  }catch(error){
+    console.log("Failed to create startStream: " + error);
+    res.status(500).send('Failed')
+  }
+  res.status(200).send('Hello World!')
 });
 
 app.get('/devices', function(req, res) {
