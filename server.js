@@ -3,7 +3,7 @@ import WebSocket from 'ws';
 
 import serverConfig from './config/ServerConfig';
 import {startOscListener, stopOscListener} from './src/osc-client/osc-qtm'
-import init_wemos_wss from './src/controller/wemos-wss'
+import {init_wemos_wss} from './src/controller/wemos-wss'
 import {router, init_router} from './src/controller/controller'
 
 try {
