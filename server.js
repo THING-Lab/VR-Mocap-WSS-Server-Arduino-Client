@@ -3,20 +3,14 @@ import WebSocket from "ws";
 
 import serverConfig from "./config/ServerConfig";
 import { startOscListener, stopOscListener } from "./src/osc-client/osc-qtm";
-import { init_wemos_wss } from "./src/controller/wemos-wss";
+import { initWemosWss } from "./src/controller/wemos-wss";
 import { router, init_router } from "./src/controller/controller";
-
-try {
-  var server = startOscListener();
-} catch (error) {
-  console.log("Failed to start OSC - Listener: " + error);
-  console.log("Gracefully shutdown listener");
-  stopOscListener();
-}
 
 const wemos_uuid = new Object();
 const app = express();
-const wss = new WebSocket.Server({ port: serverConfig.wemos_stream_port });
+const wssWemos = new WebSocket.Server({ port: serverConfig.wemos_stream_port });
+const wssAFrame = new WebSocket.Server({ port: serverConfig.aframe_stream_port });
+
 
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/"));
@@ -24,9 +18,23 @@ app.use("/", router);
 init_router(wemos_uuid);
 
 try {
-  init_wemos_wss(wss, wemos_uuid);
+  initWemosWss(wssWemos, wemos_uuid);
 } catch (err) {
-  console.log("Failed to init_wemos_wss: " + err);
+  console.log("Failed to initWemosWss: " + err);
+}
+
+try {
+  initAframeWss(wssWemos, wemos_uuid);
+} catch (err) {
+  console.log("Failed to initAframeWss: " + err);
+}
+
+try {
+  var server = startOscListener();
+} catch (error) {
+  console.log("Failed to start OSC - Listener: " + error);
+  console.log("Gracefully shutdown listener");
+  stopOscListener();
 }
 
 app.use((req, res, next) => {

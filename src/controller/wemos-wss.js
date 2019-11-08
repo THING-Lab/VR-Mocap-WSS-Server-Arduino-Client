@@ -74,4 +74,4 @@ const generate = function() {
   return rtn;
 };
 
-module.exports.init_wemos_wss = init;
+module.exports.initWemosWss = init;
