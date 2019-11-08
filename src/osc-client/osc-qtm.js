@@ -31,7 +31,6 @@ const startStream = (components, qtmServerAddr = QTMServerAddress) => {
   });
   // Open the socket.
   udpPortClinet.open();
-  console.log(udpPortClinet);
   console.log("[OSC Client] - Openning port :" + QTM_RT_OSC_PORT);
   udpPortClinet.on("ready", function() {
     console.log(
@@ -90,7 +89,6 @@ const stop = (qtmServerAddr = QTMServerAddress) => {
 
   // Open the socket.
   udpPortClinet_shut.open();
-  console.log(udpPortClinet_shut);
   udpPortClinet_shut.on("ready", function() {
     console.log("[OSC Client] Sending stutdown command. ");
     udpPortClinet_shut.send(
