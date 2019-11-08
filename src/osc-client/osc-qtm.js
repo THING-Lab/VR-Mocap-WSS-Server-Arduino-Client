@@ -7,8 +7,8 @@ var udpPortServer = null;
 //default listener port
 var QTM_RT_OSC_LISTENER_PORT = 31004;
 
-//returns the client. Use it to subscribe to other componets.
-const startStream = (componets, qtmServerAddr = QTMServerAddress) => {
+//returns the client. Use it to subscribe to other components.
+const startStream = (components, qtmServerAddr = QTMServerAddress) => {
   QTMServerAddress = qtmServerAddr;
   udpPortClinet = new osc.UDPPort({
         localAddress: QTMServerAddress,
@@ -44,7 +44,7 @@ const startStream = (componets, qtmServerAddr = QTMServerAddress) => {
         args: [
             {
                 type: "s",
-                value: componets
+                value: components
             }
         ]
     }, QTMServerAddress, QTM_RT_OSC_PORT);
@@ -52,7 +52,7 @@ const startStream = (componets, qtmServerAddr = QTMServerAddress) => {
   return udpPortClinet;  
 };
 
-const stopStream = (componets) => {
+const stopStream = () => {
   if(udpPortClinet != null){
     shutdownStreams();
   }

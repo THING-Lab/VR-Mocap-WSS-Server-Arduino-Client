@@ -8,7 +8,10 @@ import {writeToDisk,readFromDisk} from './src/Utils/FileWriter'
 import {startStream, stopStream, startOscListener, stopOscListener} from './src/osc-client/osc-qtm'
 
 try {
-  startOscListener();
+  server = startOscListener();
+  server.on("message", function (oscMessage) {
+    //the oscMessage here is a JSON obj, you can parse it however you want
+  });
 } catch (error) {
   console.log('Failed to OSC - Listener: ' + error);
   console.log('Gracefully shutdown listener'); 
