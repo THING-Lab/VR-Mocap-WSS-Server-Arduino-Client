@@ -164,14 +164,14 @@ process.on("SIGINT", signal => {
   console.log("[osc-qtm] " + signal + " signal received.");
   stop();
   stopOscListener();
-  process.exitCode = 0;
+  process.exit(0);
 });
 
 process.on("exit", signal => {
   console.log("[osc-qtm] " + signal + " signal received.");
   stop();
   stopOscListener();
-  process.exitCode = 0;
+  process.exit(0);
 });
 
 module.exports.startStream = startStream;

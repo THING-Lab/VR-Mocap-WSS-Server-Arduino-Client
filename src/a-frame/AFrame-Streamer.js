@@ -6,24 +6,26 @@ const init = (ws, data) => {
   wemos_uuid = data;
 };
 
-const broadcast6DEuler = (wss, data) => {
+const broadcast6DEuler = data => {
   if (wss.clients) {
     wss.clients.forEach(client => {
       if (client.readyState === WebSocket.OPEN) {
-        data["6DEuler"] = true;
+        data["6deuler"] = true;
         client.send(JSON.stringify(data));
       }
     });
   }
 };
-const broadcastWemosEvents = (wss, data) => {
+const broadcastWemosEvents = data => {
   if (wss.clients) {
     wss.clients.forEach(client => {
       if (client.readyState === WebSocket.OPEN) {
-        data["6DEuler"] = true;
+        data["wemos"] = true;
         client.send(JSON.stringify(data));
       }
     });
   }
 };
 module.exports.initAframeWss = init;
+module.exports.broadcast6DEuler = broadcast6DEuler;
+module.exports.broadcastWemosEvents = broadcastWemosEvents;

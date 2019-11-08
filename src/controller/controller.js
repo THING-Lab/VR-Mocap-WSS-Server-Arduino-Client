@@ -8,12 +8,14 @@ const router = express.Router();
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
-var wemos_uuid_qtm = new Object();
-var qtm_wemos_uuid = new Object();
+var wemos_uuid_qtm = null;
+var qtm_wemos_uuid = null;
 var wemos_uuid = null;
 
-const init = data => {
+const init = (data, mwemos_uuid_qtm, mqtm_wemos_uuid) => {
   wemos_uuid = data;
+  wemos_uuid_qtm = mwemos_uuid_qtm;
+  qtm_wemos_uuid = mqtm_wemos_uuid;
 };
 
 router.get("/", (req, res) => {

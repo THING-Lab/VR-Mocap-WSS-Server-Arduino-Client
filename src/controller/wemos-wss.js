@@ -1,3 +1,5 @@
+var wemos_uuid_qtm = null;
+var qtm_wemos_uuid = null;
 var wemos_uuid = null;
 var wss = null;
 const ALPHABET =
@@ -5,10 +7,19 @@ const ALPHABET =
 const delim = "@";
 
 const ID_LENGTH = 8;
+const fixedMessage = {};
+const ID = "id";
+const QTM_ID = "qid";
 
-const init = (ws, data) => {
+const logOnConsole = (msg = "[WEMOS-WSS] Click event received") => {
+  console.log(msg);
+};
+
+const init = (ws, data, mwemos_uuid_qtm, mqtm_wemos_uuid, broadcastEventCallback = logOnConsole) => {
   wss = ws;
   wemos_uuid = data;
+  wemos_uuid_qtm = mwemos_uuid_qtm;
+  qtm_wemos_uuid = mqtm_wemos_uuid;
   wss.on("connection", function(clientSocket) {
     //clientSocket.send('Connected to server');
     console.log(
@@ -17,7 +28,7 @@ const init = (ws, data) => {
 
     clientSocket.on("message", function incoming(message) {
       console.log("received: %s", message);
-      parseMessage(message, clientSocket);
+      parseMessage(message, clientSocket, broadcastEventCallback);
     });
 
     clientSocket.on("ping", function incoming(message) {
@@ -35,7 +46,11 @@ const init = (ws, data) => {
   });
 };
 
-const parseMessage = (message, clientSocket) => {
+const parseMessage = (
+  message,
+  clientSocket,
+  broadcastEventCallback
+) => {
   if (message != null && message.length > 0) {
     var arr = message.split(delim);
     if (arr.length >= 2) {
@@ -57,7 +72,10 @@ const parseMessage = (message, clientSocket) => {
           clientSocket.send("UUID@" + uuid);
           break;
         case "EVENT":
-          console.log("Click event received");
+          fixedMessage[ID] = arr[1];
+          if (arr[1] in wemos_uuid_qtm)
+            fixedMessage[QTM_ID] = wemos_uuid_qtm[arr[1]];
+          broadcastEventCallback(fixedMessage);
           break;
       }
     } else {
