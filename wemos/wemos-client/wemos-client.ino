@@ -37,9 +37,12 @@ long t0;
  * We can add timestamp in future.
  * Server will send the UUID after negotitate
 */
-String DEFAULT_CLICK_EVENT_REQ = "EVENT" +delim;
+String DEFAULT_CLICK_EVENT_ON_REQ = "CLICK_ON" +delim;
+String DEFAULT_CLICK_EVENT_OFF_REQ = "CLICK_OFF" +delim;
 //Initially set to default, will be updated after negotiatel
-String CLICK_EVENT_REQ = DEFAULT_CLICK_EVENT_REQ;
+String CLICK_EVENT_ON_REQ = DEFAULT_CLICK_EVENT_ON_REQ;
+String CLICK_EVENT_OFF_REQ = DEFAULT_CLICK_EVENT_OFF_REQ;
+
 
 #define D8INP 15
 
@@ -87,8 +90,14 @@ void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
 void negotiate(){
    webSocket.sendTXT(NEGOTIATE_REQ);
 }
+
+/**
+ * Format of received messages:
+ * COMMAND@VALUES Example : UUID@ejOjf9d
+ * Currently other messages are ignnored.
+*/
+
 void parse_payload(uint8_t * payload){
-  
  char * str = (char *)payload; 
  char* token = strtok(str, "@");
  if(token != NULL){
@@ -96,9 +105,11 @@ void parse_payload(uint8_t * payload){
     if(String(token).equalsIgnoreCase("UUID")){
         UUID = String(strtok(NULL, ""));
         Serial.println("UUID received: " + UUID);
-        CLICK_EVENT_REQ = DEFAULT_CLICK_EVENT_REQ + UUID;
-        Serial.println("[Parse_payload] CLICK_EVENT_REQ: " + CLICK_EVENT_REQ);
+        CLICK_EVENT_ON_REQ = DEFAULT_CLICK_EVENT_ON_REQ + UUID;
+        CLICK_EVENT_OFF_REQ = DEFAULT_CLICK_EVENT_OFF_REQ + UUID;
+        Serial.println("[Parse_payload] CLICK_EVENT_ON_REQ: " + CLICK_EVENT_ON_REQ);
       }
+      //Can add more messages or commands as per need.
   }
 }
 
@@ -108,19 +119,16 @@ void setup_ids(){
   }
 }
 
-void handle_click(){
+bool D8INP_SET = false;
 
-  if(digitalRead(D8INP)){
-//    webSocket.sendBIN(const uint8_t * payload, size_t length);.  
-   webSocket.sendTXT(CLICK_EVENT_REQ);
+void handle_click(){
+  if(digitalRead(D8INP) && !D8INP_SET){
+   D8INP_SET = true;
+   webSocket.sendTXT(CLICK_EVENT_ON_REQ);
+  }else if(!digitalRead(D8INP) && D8INP_SET){
+    D8INP_SET = false;
+    webSocket.sendTXT(CLICK_EVENT_OFF_REQ);
   }
-//  else{
-//    if((millis() - t0 ) > timeout){
-//      t0 = millis();
-//      Serial.printf("[handle_click] Pin not set Sending clickevent...\n");
-//      webSocket.sendTXT(CLICK_EVENT_REQ);
-//    }
-//  }
 }
 
 

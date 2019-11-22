@@ -18,11 +18,6 @@ const init = (data, mwemos_uuid_qtm, mqtm_wemos_uuid) => {
   qtm_wemos_uuid = mqtm_wemos_uuid;
 };
 
-router.get("/", (req, res) => {
-  res.send("Hello World!");
-  console.log("[GET] /");
-});
-
 router.get("/startStreaming", (req, res) => {
   try {
     startStream("StreamFrames AllFrames 6DEuler");
@@ -58,6 +53,10 @@ router.post("/heartbeat", (req, res) => {
   res.status(200);
   res.send();
 });
+
+router.get("/",(req,res)=>{
+  res.sendFile("/a-frame/index.html",{root: './'})
+})
 
 router.post("/updateDevice", (req, res) => {
   console.log("[POST] Request");

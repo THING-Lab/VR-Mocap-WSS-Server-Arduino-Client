@@ -71,8 +71,16 @@ const parseMessage = (
           );
           clientSocket.send("UUID@" + uuid);
           break;
-        case "EVENT":
+        case "CLICK_ON":
           fixedMessage[ID] = arr[1];
+          fixedMessage['TYPE'] = true;
+          if (arr[1] in wemos_uuid_qtm)
+            fixedMessage[QTM_ID] = wemos_uuid_qtm[arr[1]];
+          broadcastEventCallback(fixedMessage);
+          break;
+        case "CLICK_OFF":
+          fixedMessage[ID] = arr[1];
+          fixedMessage['TYPE'] = false;
           if (arr[1] in wemos_uuid_qtm)
             fixedMessage[QTM_ID] = wemos_uuid_qtm[arr[1]];
           broadcastEventCallback(fixedMessage);

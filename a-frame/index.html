@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>My-A-frame-app</title>
+    <meta name="description" content="My-A-frame-app">
+    <script src="../aframe.min.js"></script>
+
+</head>
+
+<body>
+    <a-scene>
+        <a-sky color="#CACACA"></a-sky>
+        <a-sphere id="sphere1_id" position="0 0.5 -7" radius="0.5" rotation="0 0 0" color="#FFFFFF"
+            animation="property: rotation; to: 0 360 0; dur: 10000;"
+            animation__mouseenter="property: components.material.material.color; type: color; to: red; startEvents: mouseenter; dur: 500"
+            ;
+            animation__mouseleave="property: components.material.material.color; type: color; to: white; startEvents: mouseleave; dur: 500"
+            ;>
+        </a-sphere>
+
+    </a-scene>
+</body>
+
+</html>
