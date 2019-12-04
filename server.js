@@ -2,6 +2,7 @@ import express from "express";
 import WebSocket from "ws";
 
 import serverConfig from "./config/ServerConfig";
+import { writeToDisk, readFromDisk } from "./src/Utils/FileWriter";
 import { startOscListener, stopOscListener } from "./src/osc-client/osc-qtm";
 import { initWemosWss } from "./src/controller/wemos-wss";
 import { router, init_router } from "./src/controller/controller";
@@ -11,9 +12,13 @@ import {
   broadcastWemosEvents
 } from "./src/a-frame/AFrame-Streamer";
 
-const wemos_uuid = new Object();
-var wemos_uuid_qtm = new Object();
+
 var qtm_wemos_uuid = new Object();
+const read_data = readFromDisk(serverConfig.wemos_uuid_pair, serverConfig.wemos_uuid_qtm_pair)
+var wemos_uuid = read_data[0];
+var wemos_uuid_qtm = read_data[1];
+console.log(wemos_uuid, wemos_uuid_qtm)
+
 const app = express();
 const wssWemos = new WebSocket.Server({ port: serverConfig.wemos_stream_port });
 const wssAFrame = new WebSocket.Server({

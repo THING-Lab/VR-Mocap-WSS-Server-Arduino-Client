@@ -32,9 +32,20 @@ var writeToDisk = function(
 };
 
 var readFromDisk = function(wemos_uuid_file, wemos_uuid_qtm_file) {
-  var wemos_uuid = fs.readFileSync(path + wemos_uuid_file, "utf-8");
-  var wemos_uuid_qtm = fs.readFileSync(path + wemos_uuid_qtm_file, "utf-8");
-
+  var wemos_uuid = null;
+  var wemos_uuid_qtm = null;
+  try {
+    wemos_uuid = fs.readFileSync(path + wemos_uuid_file, "utf-8");
+  } catch (err) {
+    console.error("Error reading file wemos_uuid", err);
+    wemos_uuid = new Object();
+  }
+  try {
+    wemos_uuid_qtm = fs.readFileSync(path + wemos_uuid_qtm_file, "utf-8");
+  } catch (err) {
+    console.error("Error reading file wemos_uuid_qtm", err);
+    wemos_uuid_qtm = new Object();
+  }
   return [JSON.parse(wemos_uuid), JSON.parse(wemos_uuid_qtm)];
 };
 

@@ -1,15 +1,28 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-	  <a class="navbar-brand" href="/devices">
+	<a class="navbar-brand" href="/setup">
 		<img class="rounded-circle" src="../resources/img/cu_logo.png" alt="" width="30" height="30">
-	  </a>
-	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+	</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+		aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
-	  </button>
-	  <div class="collapse navbar-collapse" id="navbarText">
+	</button>
+	<div class="collapse navbar-collapse" id="navbarText">
 		<ul class="navbar-nav mr-auto">
-		  <li class="nav-item">
-			<a class="nav-link" href="/devices">Devices</a>
-		  </li>
+			<li class="nav-item">
+				<a class="nav-link" href="/setup">Setup</a>
+			</li>
 		</ul>
-	  </div>
-	</nav>
+	</div>
+
+	<form action="/startStreaming" method="GET">
+		<div class="form-inline my-2 my-lg-2">
+			<button class="btn btn-outline-light my-2 my-sm-0" type="submit" id="start_button">Start Streaming</button>
+		</div>
+	</form>
+	<form action="/stopStreaming" method="GET">
+		<div class="form-inline my-2 my-lg-2">
+			<button class="btn btn-outline-light my-2 my-sm-0" type="submit" id="stop_button">Stop Streaming</button>
+		</div>
+	</form>
+
+</nav>

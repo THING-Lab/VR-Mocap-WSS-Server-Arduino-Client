@@ -1,5 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
+import serverConfig from "../../config/ServerConfig";
 
 import { writeToDisk, readFromDisk } from "../Utils/FileWriter";
 import { startStream, shutdownStreams } from "../osc-client/osc-qtm";
@@ -11,6 +12,7 @@ router.use(bodyParser.json());
 var wemos_uuid_qtm = null;
 var qtm_wemos_uuid = null;
 var wemos_uuid = null;
+var started = false;
 
 const init = (data, mwemos_uuid_qtm, mqtm_wemos_uuid) => {
   wemos_uuid = data;
@@ -21,29 +23,42 @@ const init = (data, mwemos_uuid_qtm, mqtm_wemos_uuid) => {
 router.get("/startStreaming", (req, res) => {
   try {
     startStream("StreamFrames AllFrames 6DEuler");
+    started = true;
   } catch (error) {
     shutdownStreams();
     console.log("Failed to create startStream: " + error);
-    res.status(500).send("Failed");
+    res.status(500).send("Failed to start...");
   }
-  res.status(200).send("Started");
+  res.render("pages/setup", {
+    title: "Server setup",
+    wemos_uuid: wemos_uuid,
+    wemos_uuid_qtm: wemos_uuid_qtm,
+    st: started
+  });
 });
 
 router.get("/stopStreaming", (req, res) => {
   try {
     shutdownStreams();
+    started = false;
   } catch (error) {
     console.log("Failed to stopStream: " + error);
-    res.status(500).send("Failed");
+    res.status(500).send("Failed to stop....");
   }
-  res.status(200).send("Hello World!");
+  res.render("pages/setup", {
+    title: "Server setup",
+    wemos_uuid: wemos_uuid,
+    wemos_uuid_qtm: wemos_uuid_qtm,
+    st: started
+  });
 });
 
-router.get("/devices", function(req, res) {
+router.get("/setup", function(req, res) {
   res.render("pages/setup", {
-    title: "Connected devices to server",
+    title: "Server setup",
     wemos_uuid: wemos_uuid,
-    wemos_uuid_qtm: wemos_uuid_qtm
+    wemos_uuid_qtm: wemos_uuid_qtm,
+    st: started
   });
 });
 
@@ -54,9 +69,9 @@ router.post("/heartbeat", (req, res) => {
   res.send();
 });
 
-router.get("/",(req,res)=>{
-  res.sendFile("/a-frame/index.html",{root: './'})
-})
+router.get("/", (req, res) => {
+  res.sendFile("/a-frame/index.html", { root: "./" });
+});
 
 router.post("/updateDevice", (req, res) => {
   console.log("[POST] Request");
@@ -78,9 +93,9 @@ router.post("/updateDevice", (req, res) => {
       wemos_uuid_qtm[req_uuid] = req_qtm_id;
       qtm_wemos_uuid[req_qtm_id] = req_uuid;
       writeToDisk(
-        "wemos_uuid.json",
+        serverConfig.wemos_uuid_pair,
         wemos_uuid,
-        "wemos_uuid_qtm.json",
+        serverConfig.wemos_uuid_qtm_pair,
         wemos_uuid_qtm
       );
       res.send("Updated!!!");

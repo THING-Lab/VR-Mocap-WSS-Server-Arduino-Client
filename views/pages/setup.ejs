@@ -1,17 +1,29 @@
 <% include ../partials/header %>
 <% include ../partials/menu %>
-	<div class="container">
-		<br>
-		
-		<table class="table table-bordered" id="stats_table">
-			<tr>
-				<th class="align-left">No.</th>
-				<th class="align-left">WeMos Host</th>
-				<th class="align-left">WeMos UUID</th>
-                <th class="align-left">QTM Mapping</th>
-                <th class="align-left">Update Mapping</th>
-			</tr>
-			<% if (wemos_uuid) { 
+<div class="container">
+    <% 
+        var data = 'Stopped Streaming';
+        if (st) { 
+            data = 'Streaming';
+        }
+        else{
+            data = 'Not Streaming';
+        }
+    %>
+    <div class="float-sm-right" ><%- data %></div><br>
+</div>
+
+<div class="container">
+    <br>
+    <table class="table table-bordered" id="stats_table">
+        <tr>
+            <th class="align-left">No.</th>
+            <th class="align-left">WeMos Host</th>
+            <th class="align-left">WeMos UUID</th>
+            <th class="align-left">QTM Mapping</th>
+            <th class="align-left">Update Mapping</th>
+        </tr>
+        <% if (wemos_uuid) { 
                 var device_rows = '';
                 var i = 1;
                 for(var wemos_host in wemos_uuid) {
@@ -31,9 +43,9 @@
                     device_rows += '<td><a href="#" onclick="update_qtm_mapping('+ aa+')">' + "Update" + '</a></td></tr>';
                 }
                 %>
-			<%- device_rows %>
-			<% } %>
-		</table>
-		<br>
-	</div>
+        <%- device_rows %>
+        <% } %>
+    </table>
+    <br>
+</div>
 <% include ../partials/footer %>
