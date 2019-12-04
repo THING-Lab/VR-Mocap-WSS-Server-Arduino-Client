@@ -5,7 +5,7 @@ var socketClosed = true;
 
 const startListening = (callBackOnMessage = null) => {
   if (socket == null || socket == undefined || socketClosed) {
-    socket = new WebSocket("ws://localhost:44523");
+    socket = new WebSocket("ws://0.0.0.0:44523");
   }
   // Connection opened
   socket.addEventListener("open", function(event) {
