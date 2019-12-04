@@ -1,6 +1,6 @@
 const CONNECTION_LOST = "Connection lost...Reconnecting in 5 seconds."
 function init() {
-  var cs = new WebSocket("wss://0.0.0.0:44523", "osc-v1");
+  var cs = new WebSocket("ws://192.168.1.100:44523", "osc-v1");
   cs.onmessage = function(event) {
     console.log(event.data);
   };

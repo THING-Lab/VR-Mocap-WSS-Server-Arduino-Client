@@ -26,6 +26,7 @@ app.use("/", router);
 init_router(wemos_uuid, wemos_uuid_qtm, qtm_wemos_uuid);
 
 try {
+  console.log("Started streaming on connected clients.")
   initAframeWss(wssAFrame, wemos_uuid);
 } catch (err) {
   console.log("Failed to initAframeWss: " + err);

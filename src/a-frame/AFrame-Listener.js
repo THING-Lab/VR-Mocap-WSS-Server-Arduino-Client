@@ -1,11 +1,11 @@
 import { type } from "os";
-
+const CONNECTION_LOST = "Connection lost...Reconnecting in 5 seconds."
 const socket = null;
 var socketClosed = true;
 
 const startListening = (callBackOnMessage = null) => {
   if (socket == null || socket == undefined || socketClosed) {
-    socket = new WebSocket("ws://0.0.0.0:44523");
+    socket = new WebSocket("ws://192.168.1.100:44523");
   }
   // Connection opened
   socket.addEventListener("open", function(event) {
@@ -27,8 +27,11 @@ const startListening = (callBackOnMessage = null) => {
   });
 
   socket.addEventListener("close", event => {
-    console.log("The connection has been closed.");
     socketClosed = true;
+    console.error(CONNECTION_LOST,event);
+    setTimeout(function() {
+      startListening(callBackOnMessage);
+    }, 5000);
   });
 };
 

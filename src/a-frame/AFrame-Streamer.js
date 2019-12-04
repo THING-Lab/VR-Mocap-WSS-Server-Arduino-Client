@@ -1,3 +1,4 @@
+const WebSocket = require("ws");
 var wemos_uuid = null;
 var wss = null;
 
