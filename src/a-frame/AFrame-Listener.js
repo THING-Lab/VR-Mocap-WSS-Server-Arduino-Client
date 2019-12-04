@@ -1,5 +1,5 @@
 const CONNECTION_LOST = "Connection lost...Reconnecting in 5 seconds."
-const socket = null;
+var socket = null;
 var socketClosed = true;
 
 const startListening = (callBackOnMessage = null) => {
