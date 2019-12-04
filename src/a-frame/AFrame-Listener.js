@@ -1,4 +1,3 @@
-import { type } from "os";
 const CONNECTION_LOST = "Connection lost...Reconnecting in 5 seconds."
 const socket = null;
 var socketClosed = true;
