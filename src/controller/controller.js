@@ -62,6 +62,12 @@ router.get("/setup", function(req, res) {
   });
 });
 
+router.get("/", function(req, res) {
+  res.render("pages/home", {
+    title: "Home page",
+  });
+});
+
 router.post("/heartbeat", (req, res) => {
   console.log("[POST] Request");
   //console.log(req);
@@ -69,7 +75,7 @@ router.post("/heartbeat", (req, res) => {
   res.send();
 });
 
-router.get("/", (req, res) => {
+router.get("/preview", (req, res) => {
   res.sendFile("/a-frame/index.html", { root: "./" });
 });
 
