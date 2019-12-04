@@ -73,14 +73,14 @@ const parseMessage = (
           break;
         case "CLICK_ON":
           fixedMessage[ID] = arr[1];
-          fixedMessage['TYPE'] = true;
+          fixedMessage['click'] = true;
           if (arr[1] in wemos_uuid_qtm)
             fixedMessage[QTM_ID] = wemos_uuid_qtm[arr[1]];
           broadcastEventCallback(fixedMessage);
           break;
         case "CLICK_OFF":
           fixedMessage[ID] = arr[1];
-          fixedMessage['TYPE'] = false;
+          fixedMessage['click'] = false;
           if (arr[1] in wemos_uuid_qtm)
             fixedMessage[QTM_ID] = wemos_uuid_qtm[arr[1]];
           broadcastEventCallback(fixedMessage);

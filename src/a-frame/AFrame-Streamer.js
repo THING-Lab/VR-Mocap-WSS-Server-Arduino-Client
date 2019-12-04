@@ -11,7 +11,7 @@ const broadcast6DEuler = data => {
   if (wss.clients) {
     wss.clients.forEach(client => {
       if (client.readyState === WebSocket.OPEN) {
-        data["6deuler"] = true;
+        data["6d_euler"] = true;
         client.send(JSON.stringify(data));
       }
     });

@@ -6,13 +6,13 @@
     <title>My-A-frame-app</title>
     <meta name="description" content="My-A-frame-app">
     <script src="../aframe.min.js"></script>
-    <script src="../src/a-frame/AFrame-Listener.js"></script>
+    <script src="../src/a-frame/AFrame-Client.js"></script>
 </head>
 
 <body>
     <a-scene>
         <a-entity id="rig" position="0 0 0">
-            <a-camera id="camera"></a-camera>
+            <a-camera id="shreshtha_headset_camera"></a-camera>
         </a-entity>
         <a-sky color="#CACACA"></a-sky>
         <a-sphere id="sphere1_id" position="0 0.5 -7" radius="0.5" rotation="0 0 0" color="#FFFFFF"
@@ -23,11 +23,11 @@
             ;>
         </a-sphere>
 
-        <a-entity id="box1_id" position="0 -5 -7" geometry="primitive: box; width: 1; height: 1; depth: 1"></a-entity>
+        <a-entity id="box1_brush_id" position="0 -5 -7" geometry="primitive: box; width: 1; height: 1; depth: 1"></a-entity>
 
     </a-scene>
     <script>
-        startListening()
+        startListening(main)
     </script>
 </body>
 
