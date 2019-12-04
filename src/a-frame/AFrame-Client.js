@@ -192,8 +192,9 @@ const wsMessageParser = message => {
   }
 };
 
-const updateOnlineDevices = devices => {
-  var list = '<li class="list-group-item active">Online devices</li>';
+const updateOnlineDevices = (devices = connected_devices) => {
+  var list =
+    '<li class="list-group-item active">Rigid bodies currently being streamed - select your headset to begin.</li>';
   if (devices) {
     for (var device in devices) {
       if (devices.hasOwnProperty(device)) {

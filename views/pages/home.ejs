@@ -1,12 +1,14 @@
 <% include ../partials/header %>
 <% include ../partials/menu %>
+<br /><br />
 <div class="container">
     <form action="/preview" method="GET">
         <div class="list-group" id="online_devices">
         </div>
     </form>
     <script>
-        fakeTest();
+        startListening(collectOnlineDevices)
+        setInterval(updateOnlineDevices, 5000);
     </script>
 </div>
 <% include ../partials/footer %>
