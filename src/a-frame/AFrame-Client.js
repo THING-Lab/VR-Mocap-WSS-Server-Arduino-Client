@@ -15,6 +15,13 @@ const extractPosition = data => {
   return pos;
 };
 
+const extractRotation = data => {
+  const euler = data["args"];
+  var rotation = `${euler[3].value / 50} ${euler[4].value / 50} ${euler[5].value /
+    50}`;
+  return rotation;
+};
+
 const createBrush = (id, color, position) => {
   var scene = document.querySelector("a-scene");
   var box = document.createElement("a-box");
@@ -104,6 +111,11 @@ const main = data => {
      */
     if (data[ADDRESS] == my_headset) {
       //set the camera position according to the current selected device.
+      const my_camera = document.getElementById("shreshtha_headset_camera");
+
+      my_camera.setAttribute("position", extractPosition(data));
+      my_camera.setAttribute("rotation", extractRotation(data));
+
     } else {
       //set the position of the brush.
       if (data[ADDRESS] in objects_in_scene) {
