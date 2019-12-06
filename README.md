@@ -1,4 +1,23 @@
-The repository contains a node js server which exposes an HTTP endpoint as well as WebSocket ports.
+# Introduction
+
+The repository contains a node js based server which streams the Qualisys-RT feed on a websocket. On the same websocket the server streams messages received from the connected ESP8266 devices. The server also exposes HTTP endpoints to setup the whole configuration and load all these data in a A-frame based application.
+
+
+# Installation
+
+Install Node.js® and NPM (Node Package Manager).
+
+For mac users, the easiest way is to use install using homebrew:-
+
+    $ brew install node
+
+For ubuntu users, simply use apt.
+
+    $ sudo apt install nodejs
+
+# Usage
+## Configuring the server.
+The server by default 
 
 The Http endpoint is used to map the connected device Rigid body name (the name which Mocap server uses to stream data) to the Arduino.
 
