@@ -58,13 +58,15 @@ router.get("/setup", function(req, res) {
     title: "Server setup",
     wemos_uuid: wemos_uuid,
     wemos_uuid_qtm: wemos_uuid_qtm,
-    st: started
+    st: started,
+    settings:true
   });
 });
 
 router.get("/", function(req, res) {
   res.render("pages/home", {
     title: "Home page",
+    settings:false
   });
 });
 

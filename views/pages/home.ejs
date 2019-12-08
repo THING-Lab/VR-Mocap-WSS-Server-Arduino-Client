@@ -7,7 +7,8 @@
         </div>
     </form>
     <script>
-        startListening(collectOnlineDevices)
+        startListening(collectOnlineDevices);
+        updateOnlineDevices();
         setInterval(updateOnlineDevices, 5000);
     </script>
 </div>

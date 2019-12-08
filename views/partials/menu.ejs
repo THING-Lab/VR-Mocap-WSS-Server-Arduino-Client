@@ -16,7 +16,9 @@
 			</li>
 		</ul>
 	</div>
-
+	<% var form = ``;
+	if (settings) { 
+		form = `
 	<form action="/startStreaming" method="GET">
 		<div class="form-inline my-2 my-lg-2">
 			<button class="btn btn-outline-light my-2 my-sm-0" type="submit" id="start_button">Start Streaming</button>
@@ -26,6 +28,8 @@
 		<div class="form-inline my-2 my-lg-2">
 			<button class="btn btn-outline-light my-2 my-sm-0" type="submit" id="stop_button">Stop Streaming</button>
 		</div>
-	</form>
-
+	</form>`;
+	}
+	%>
+	<%- form %>
 </nav>
