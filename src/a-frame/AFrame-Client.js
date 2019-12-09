@@ -10,15 +10,13 @@ const getRigidBodyName = rigidBody => {
 
 const extractPosition = data => {
   const euler = data["args"];
-  var pos = `${euler[0].value / 50} ${euler[1].value / 50} ${euler[2].value /
-    50}`;
+  var pos = `${euler[2].value /50} ${euler[1].value / 50} ${euler[0].value / 50}`;
   return pos;
 };
 
 const extractRotation = data => {
   const euler = data["args"];
-  var rotation = `${euler[3].value / 50} ${euler[4].value / 50} ${euler[5].value /
-    50}`;
+  var rotation = `${euler[5].value} ${euler[4].value} ${euler[3].value}`;
   return rotation;
 };
 
@@ -27,8 +25,8 @@ const createBrush = (id, color, position) => {
   var box = document.createElement("a-box");
   box.setAttribute("position", position);
   box.setAttribute("color", color);
-  box.setAttribute("height", "6.5");
-  box.setAttribute("width", "4");
+  box.setAttribute("height", "3.5");
+  box.setAttribute("width", "2");
   box.setAttribute("depth", "1.75");
   box.setAttribute("id", id);
   // box.setAttribute('src', '#netTexture');
@@ -101,6 +99,7 @@ const getParameterByName = (name, url) => {
 };
 
 const main = data => {
+  //console.log(data)
   if (data == null || data == undefined) {
     return;
   }
@@ -111,10 +110,10 @@ const main = data => {
      */
     if (data[ADDRESS] == my_headset) {
       //set the camera position according to the current selected device.
-      const my_camera = document.getElementById("shreshtha_headset_camera");
-
-      my_camera.setAttribute("position", extractPosition(data));
-      my_camera.setAttribute("rotation", extractRotation(data));
+      const my_camera_rig = document.getElementById("rig");
+      
+      my_camera_rig.setAttribute("position", extractPosition(data));
+      my_camera_rig.setAttribute("rotation", extractRotation(data));
 
     } else {
       //set the position of the brush.
@@ -122,6 +121,10 @@ const main = data => {
         objects_in_scene[data[ADDRESS]].setAttribute(
           "position",
           extractPosition(data)
+        );
+        objects_in_scene[data[ADDRESS]].setAttribute(
+          "rotation",
+          extractRotation(data)
         );
       } else {
         //lets create one---just make sure we don't create camera object but do we
