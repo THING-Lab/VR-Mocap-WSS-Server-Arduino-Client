@@ -1,4 +1,5 @@
 var osc = require("osc");
+import serverConfig from "../../config/ServerConfig";
 
 var QTMServerAddress = "127.0.0.1";
 const QTM_RT_OSC_PORT = 22225; //base +4 port :xD
@@ -6,7 +7,7 @@ var udpPortClinet = null;
 var udpPortClinet_shut = null;
 var udpPortServer = null;
 //default listener port
-var QTM_RT_OSC_LISTENER_PORT = 31004;
+var QTM_RT_OSC_LISTENER_PORT = serverConfig.qtm_listen_port;
 
 //returns the client. Use it to subscribe to other components.
 const createSocket = (addr, port) => {
