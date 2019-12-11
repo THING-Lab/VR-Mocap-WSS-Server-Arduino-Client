@@ -10,13 +10,15 @@ const getRigidBodyName = rigidBody => {
 
 const extractPosition = data => {
   const euler = data["args"];
-  var pos = `${euler[2].value /50} ${euler[1].value / 50} ${euler[0].value / 50}`;
+  var pos = `${euler[0].value /50} ${euler[2].value / 50} ${-euler[1].value / 50}`;
+
   return pos;
 };
 
 const extractRotation = data => {
   const euler = data["args"];
-  var rotation = `${euler[5].value} ${euler[4].value} ${euler[3].value}`;
+  var rotation = `${euler[3].value} ${euler[5].value} ${euler[4].value}`;
+
   return rotation;
 };
 
@@ -113,7 +115,7 @@ const main = data => {
       const my_camera_rig = document.getElementById("rig");
       
       my_camera_rig.setAttribute("position", extractPosition(data));
-      my_camera_rig.setAttribute("rotation", extractRotation(data));
+      // my_camera_rig.setAttribute("rotation", extractRotation(data));
 
     } else {
       //set the position of the brush.
