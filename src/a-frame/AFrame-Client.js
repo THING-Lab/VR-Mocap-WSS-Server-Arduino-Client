@@ -11,12 +11,14 @@ const getRigidBodyName = rigidBody => {
 const extractPosition = data => {
   const euler = data["args"];
   var pos = `${euler[0].value /50} ${euler[2].value / 50} ${-euler[1].value / 50}`;
+
   return pos;
 };
 
 const extractRotation = data => {
   const euler = data["args"];
   var rotation = `${euler[3].value} ${euler[5].value} ${euler[4].value}`;
+
   return rotation;
 };
 
