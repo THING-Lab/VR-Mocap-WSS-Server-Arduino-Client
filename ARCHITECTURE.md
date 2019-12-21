@@ -4,7 +4,7 @@ Websocket library: Decided to use the WebSocket library by Markus Sattler v2.1.1
 How wemos registers itself on the node server. We use the following protocol to register wemos on the server. 
 ![Wemos-Arch](./wemos-arch.png)
 
-##Protocol explained:
+## Protocol explained:
 1. Register: As soon as the wemos device is powered on, it sends a NEGOTIATE request to register itself on the server. If the request is sent to a valid server address, the server replies with a UUID. The wemos stores this variable locally and uses this id to send further requests. The node js server caches the UUID, so even if the device is powered on/off it gets the same UUID every time. If the wemos device has not received a UUID from the server after booting it keeps on sending the Negotiate request to the server. 
 2. Events: Whenever the D8 input pin is set on the wemos device the wemos device sends a click_on message with it’s UUID to the server. As soon as the button is released again a message with click_off is sent to the server. The server doesn’t reply to these message as the connection is TCP. 
 3. Extention: The code is implemented to handle bi-directional communication. It is quite simple to extend this protocol to add various other messages. 
@@ -56,3 +56,8 @@ Note: Don't forget to add those in wemos implementation.
 
 ## How to add support get all these messages on your VR application.  
 We have a very basic proof of concept implemented which uses all the features of the application. If you look at the [index](./a-frame/index.html), you'll see just two function calls(init and startListening). Init, as the name suggests, starts the WebSocket client. The startListening function takes a callback, this callback is called on each message received on the WebSocket. [Here](./src/a-frame/AFrame-Client.js) we an implementation called `main` which parses all the messages and create dynamic objects in the a-frame context. (Good knowledge of javascript is expected). You can write your own callbacks like `main` do the parsing to manipulate stuff or add further functionality in it.  
+
+
+# References
+https://qualisys.github.io/Real-Time-Protocol-Documentation/  
+https://aframe.io/docs/1.0.0/introduction/  
