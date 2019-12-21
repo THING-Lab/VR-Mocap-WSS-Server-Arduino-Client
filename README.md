@@ -48,7 +48,7 @@ As soon as the wemos comes up, it tries to register itself on the Node js server
 2. Open the home page by going to http://localhost:5000/ or http://your-server-ipaddress:5000. Navigate to the setup page.
 3. If your wemos device is connected you should see the device in the table. 
 4. Edit the 'QTM Mapping' field in the table to be same as the deice name configured in QTM 6DOF rigid bodies. 
-NOTE: It is very important to prefix the rigid body name with '/qtm/6d_euler/'. [Example](https://i.imgur.com/iiOS9Ls.png) 
+NOTE: It is very important to prefix the rigid body name with '/qtm/6d_euler/'. ![Setup](./setup-page.png) 
 These mappings are saved in the local storage in the data directory. The file names are defined in [Config](./config/ServerConfig.js) 
 5. Click on Start streaming to start the stream. 
 NOTE: You need to start the QTM real-time streaming before clicking on the start streaming button. Things may not work if you don't do that. Why? The start streaming button sends a UDP message to the QTM server which says to start streaming the 6d_eulers of the configured rigid bodies. 
@@ -61,7 +61,7 @@ NOTE: You must stop stream before shutting down the node js server if you don't 
 3. Wait for 5 seconds for the application to load all the devices which are currently being streamed. The page updates every 5 seconds. 
 4. Click on your headset, this will navigate you to the scene. 
 5. The selected headset becomes your camera, so make sure you select the correct headset. 
-[Example](https://i.imgur.com/BJ0tWVw.png) 
+![Example](./tracked-devices.png) 
 
 
 # Architecture
